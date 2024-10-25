@@ -8,14 +8,14 @@ def main():
     st.title("Flashcard App")
 
     # Dark mode toggle
-    dark_mode = st.sidebar.checkbox("Dark Mode")
+    dark_mode = st.button("🌙", key="dark_mode_toggle", help="Toggle Dark Mode")
     if dark_mode:
         st.markdown(
             """
             <style>
-            body {
-                background-color: #333;
-                color: #f0f0f0;
+            .main, .sidebar-content {
+                background-color: #333 !important;
+                color: #f0f0f0 !important;
             }
             .flashcard-box {
                 background-color: #444;
@@ -39,7 +39,7 @@ def main():
 
     # Load the appropriate CSV
     if language in ["French", "German", "Spanish"] and level is not None:
-        data = pd.read_csv(f"data/{language}/{language}_{level}.csv")
+        data = pd.read_csv(f"Data/{language}/{language}_{level}.csv")
     else:
         data = None
         uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
@@ -78,7 +78,6 @@ def main():
                 st.session_state.reveal = False
                 st.session_state.session_ended = False
                 random.shuffle(flashcards)
-                st.session_state.current_index = 0
         else:
             # Immersive view when a specific language and level are selected
             current_card = flashcards[st.session_state.current_index]
@@ -141,7 +140,6 @@ def main():
                             else:
                                 st.session_state.current_index += 1
                                 st.session_state.reveal = False
-                            st.session_state.current_index = 0
                     with col2:
                         if st.button("Incorrect", disabled=not st.session_state.reveal):
                             st.warning("Keep trying!")
@@ -151,7 +149,6 @@ def main():
                             else:
                                 st.session_state.current_index += 1
                                 st.session_state.reveal = False
-                            st.session_state.current_index = 0
             else:
                 if st.button("Reveal Answer", disabled=st.session_state.reveal):
                     st.session_state.reveal = True
@@ -162,17 +159,16 @@ def main():
                 st.session_state.current_index = 0
 
         # Total display and Restart Button
-        st.sidebar.markdown("## Total")
-        st.sidebar.write(f"Total Correct: {st.session_state.correct_count}")
-        st.sidebar.write(f"Total Incorrect: {st.session_state.incorrect_count}")
-        if st.sidebar.button("Restart Session"):
+        st.markdown("## Total")
+        st.write(f"Total Correct: {st.session_state.correct_count}")
+        st.write(f"Total Incorrect: {st.session_state.incorrect_count}")
+        if st.button("Restart Session"):
             st.session_state.current_index = 0
             st.session_state.correct_count = 0
             st.session_state.incorrect_count = 0
             st.session_state.reveal = False
             st.session_state.session_ended = False
             random.shuffle(flashcards)
-            st.session_state.current_index = 0
 
 if __name__ == "__main__":
     main()
