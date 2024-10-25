@@ -5,13 +5,56 @@ import os
 
 # Streamlit Flashcard App
 def main():
+    # Custom CSS for styling
+    st.markdown(
+        """
+        <style>
+            body {
+                background-color: #f5f5f5;
+                font-family: 'Arial', sans-serif;
+            }
+            .main-container {
+                max-width: 700px;
+                margin: auto;
+            }
+            .flashcard {
+                background-color: #ffffff;
+                padding: 30px;
+                border-radius: 20px;
+                text-align: center;
+                font-size: 24px;
+                margin: 20px 0;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                transition: transform 0.4s;
+            }
+            .flashcard:hover {
+                transform: translateY(-5px);
+            }
+            .answer {
+                background-color: #dff0d8;
+                padding: 30px;
+                border-radius: 20px;
+                text-align: center;
+                font-size: 24px;
+                margin: 20px 0;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                transition: transform 0.4s;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Main Container
+    st.markdown("<div class='main-container'>", unsafe_allow_html=True)
+
     # Dropdown menu for selecting example CSVs
     language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
     level = None
     theme_colors = {
-        "French": "#f0e68c",
-        "German": "#ffcccb",
-        "Spanish": "#f5deb3"
+        "French": "#ffdfba",
+        "German": "#d4a5a5",
+        "Spanish": "#ffe6e6"
     }
 
     if language != "None":
@@ -52,13 +95,12 @@ def main():
 
         # Set themed color for the selected language
         card_background_color = theme_colors.get(language, "#f0f0f5")
-        answer_background_color = "#dff0d8"
 
         # End session summary
         if st.session_state.session_ended:
             st.header("Session Summary")
-            st.write(f"Total Correct: {st.session_state.correct_count}")
-            st.write(f"Total Incorrect: {st.session_state.incorrect_count}")
+            st.subheader(f"Accuracy: {100 * st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count):.2f}%")
+            st.progress(st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count))
             if st.button("Restart Session"):
                 st.session_state.current_index = 0
                 st.session_state.correct_count = 0
@@ -71,70 +113,31 @@ def main():
             current_card = st.session_state.flashcards[st.session_state.current_index]
             question, answer = current_card[0], current_card[1]
 
-            # Layout for flashcard display
-            st.markdown(f"""
-                <style>
-                .flashcard-box {{
-                    background-color: {card_background_color};
-                    padding: 40px;
-                    border-radius: 15px;
-                    text-align: center;
-                    font-size: 28px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    transition: transform 0.3s;
-                }}
-                .flashcard-box:hover {{
-                    transform: scale(1.05);
-                }}
-                </style>
+            # Display Question
+            st.markdown(f"<div class='flashcard'><strong>Question:</strong> {question}</div>", unsafe_allow_html=True)
 
-                <div class="flashcard-box">
-                    <p><strong>Question:</strong> {question}</p>
-                </div>
-            """, unsafe_allow_html=True)
-
+            # Reveal answer if requested
             if st.session_state.reveal:
-                st.markdown(f"""
-                    <style>
-                    .flashcard-box {{
-                        background-color: {answer_background_color};
-                        padding: 40px;
-                        border-radius: 15px;
-                        text-align: center;
-                        font-size: 28px;
-                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                        transition: transform 0.3s;
-                    }}
-                    .flashcard-box:hover {{
-                        transform: scale(1.05);
-                    }}
-                    </style>
-
-                    <div class="flashcard-box">
-                        <p><strong>Answer:</strong> {answer}</p>
-                    </div>
-                """, unsafe_allow_html=True)
+                st.markdown(f"<div class='answer'><strong>Answer:</strong> {answer}</div>", unsafe_allow_html=True)
 
                 # Buttons for correct and incorrect
-                button_container = st.container() if st.session_state.reveal else st.empty()
-                with button_container:
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        if st.button("Correct", key='correct_button'):
-                            st.session_state.correct_count += 1
-                            if st.session_state.current_index == len(st.session_state.flashcards) - 1:
-                                st.session_state.session_ended = True
-                            else:
-                                st.session_state.current_index += 1
-                                st.session_state.reveal = False
-                    with col2:
-                        if st.button("Incorrect", key='incorrect_button'):
-                            st.session_state.incorrect_count += 1
-                            if st.session_state.current_index == len(st.session_state.flashcards) - 1:
-                                st.session_state.session_ended = True
-                            else:
-                                st.session_state.current_index += 1
-                                st.session_state.reveal = False
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button("Correct", key='correct_button'):
+                        st.session_state.correct_count += 1
+                        if st.session_state.current_index == len(st.session_state.flashcards) - 1:
+                            st.session_state.session_ended = True
+                        else:
+                            st.session_state.current_index += 1
+                            st.session_state.reveal = False
+                with col2:
+                    if st.button("Incorrect", key='incorrect_button'):
+                        st.session_state.incorrect_count += 1
+                        if st.session_state.current_index == len(st.session_state.flashcards) - 1:
+                            st.session_state.session_ended = True
+                        else:
+                            st.session_state.current_index += 1
+                            st.session_state.reveal = False
             else:
                 if st.button("Reveal Answer", key='reveal_button'):
                     st.session_state.reveal = True
@@ -145,9 +148,6 @@ def main():
                 st.session_state.current_index = 0
 
         # Total display and Restart Button
-        if st.session_state.correct_count + st.session_state.incorrect_count > 0:
-            accuracy = (st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count)) * 100
-            st.write(f"Current Accuracy: {accuracy:.2f}%")
         if st.button("Restart Session"):
             st.session_state.current_index = 0
             st.session_state.correct_count = 0
@@ -155,6 +155,9 @@ def main():
             st.session_state.reveal = False
             st.session_state.session_ended = False
             random.shuffle(st.session_state.flashcards)
+
+    # Close Main Container
+    st.markdown("</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
