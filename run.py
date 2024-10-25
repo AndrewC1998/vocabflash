@@ -32,8 +32,11 @@ def main():
             data = pd.read_csv(uploaded_file)
 
     if data is not None:
-        flashcards = list(data.itertuples(index=False, name=None))
-
+        # Shuffle flashcards only once and store in session state
+        if 'flashcards' not in st.session_state:
+            flashcards = list(data.itertuples(index=False, name=None))
+            random.shuffle(flashcards)
+            st.session_state.flashcards = flashcards
 
         # Initialize session state for the current card index, reveal state, and score tracking
         if 'current_index' not in st.session_state:
@@ -65,9 +68,7 @@ def main():
                 random.shuffle(st.session_state.flashcards)
         else:
             # Immersive view when a specific language and level are selected
-            if 'flashcards' not in st.session_state:
-            st.session_state.flashcards = flashcards
-        current_card = st.session_state.flashcards[st.session_state.current_index]
+            current_card = st.session_state.flashcards[st.session_state.current_index]
             question, answer = current_card[0], current_card[1]
 
             # Layout for flashcard display
@@ -122,7 +123,7 @@ def main():
                         if st.button("Correct", disabled=not st.session_state.reveal):
                             st.success("Great job!")
                             st.session_state.correct_count += 1
-                            if st.session_state.current_index == len(flashcards) - 1:
+                            if st.session_state.current_index == len(st.session_state.flashcards) - 1:
                                 st.session_state.session_ended = True
                             else:
                                 st.session_state.current_index += 1
@@ -131,7 +132,7 @@ def main():
                         if st.button("Incorrect", disabled=not st.session_state.reveal):
                             st.warning("Keep trying!")
                             st.session_state.incorrect_count += 1
-                            if st.session_state.current_index == len(flashcards) - 1:
+                            if st.session_state.current_index == len(st.session_state.flashcards) - 1:
                                 st.session_state.session_ended = True
                             else:
                                 st.session_state.current_index += 1
@@ -155,7 +156,7 @@ def main():
             st.session_state.incorrect_count = 0
             st.session_state.reveal = False
             st.session_state.session_ended = False
-            random.shuffle(flashcards)
+            random.shuffle(st.session_state.flashcards)
 
 if __name__ == "__main__":
     main()
