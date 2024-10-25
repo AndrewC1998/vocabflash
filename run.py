@@ -17,8 +17,16 @@ def main():
         level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"])
 
     # Load the appropriate CSV
+    import os
+    st.write("Current directory contents:", os.listdir(os.getcwd()))
     if language in ["French", "German", "Spanish"] and level is not None:
-        data = pd.read_csv(f"Data/French/French_A1.csv")
+        file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
+        if os.path.exists(file_path):
+            st.write(f"Attempting to read file from: {file_path}")
+            data = pd.read_csv(file_path)
+        else:
+            st.error(f"File not found: {file_path}. Please check the path and try again.")
+            data = None
     else:
         data = None
         uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
