@@ -1,29 +1,15 @@
 import streamlit as st
 import pandas as pd
 import random
+import os
 
 # Streamlit Flashcard App
 def main():
     st.set_page_config(page_title="Flashcard App", layout="wide")
     st.title("Flashcard App")
 
-    # Dark mode toggle
-    dark_mode = st.button("🌙", key="dark_mode_toggle", help="Toggle Dark Mode")
-    if dark_mode:
-        st.markdown(
-            """
-            <style>
-            .main, .sidebar-content {
-                background-color: #333 !important;
-                color: #f0f0f0 !important;
-            }
-            .flashcard-box {
-                background-color: #444;
-                color: #f0f0f0;
-            }
-            </style>
-            """, unsafe_allow_html=True
-        )
+    # Print current working directory for debugging
+    st.write(f"Current working directory: {os.getcwd()}")
 
     # Dropdown menu for selecting example CSVs
     language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
@@ -38,10 +24,14 @@ def main():
         level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"])
 
     # Load the appropriate CSV
+    data = None
     if language in ["French", "German", "Spanish"] and level is not None:
-        data = pd.read_csv(f"Data/{language}/{language}_{level}.csv")
+        file_path = f"Data/{language}/{language}_{level}.csv"
+        if os.path.exists(file_path):
+            data = pd.read_csv(file_path)
+        else:
+            st.error(f"File not found: {file_path}. Please check the path and try again.")
     else:
-        data = None
         uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
@@ -63,8 +53,8 @@ def main():
             st.session_state.session_ended = False
 
         # Set themed color for the selected language
-        card_background_color = theme_colors.get(language, "#f0f0f5") if not dark_mode else "#444"
-        answer_background_color = "#dff0d8" if not dark_mode else "#555"
+        card_background_color = theme_colors.get(language, "#f0f0f5")
+        answer_background_color = "#dff0d8"
 
         # End session summary
         if st.session_state.session_ended:
