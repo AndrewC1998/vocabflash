@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import random
+import os
 
 # Streamlit Flashcard App
 def main():
@@ -17,11 +18,10 @@ def main():
         level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"])
 
     # Load the appropriate CSV
-    import os
-        if language in ["French", "German", "Spanish"] and level is not None:
-                file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
+    if language in ["French", "German", "Spanish"] and level is not None:
+        file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
         if os.path.exists(file_path):
-                        data = pd.read_csv(file_path)
+            data = pd.read_csv(file_path)
         else:
             st.error(f"File not found: {file_path}. Please check the path and try again.")
             data = None
