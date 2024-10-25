@@ -120,7 +120,7 @@ def main():
                 with button_container:
                     col1, col2 = st.columns(2)
                     with col1:
-                        if st.button("Correct", disabled=not st.session_state.reveal):
+                        if st.button("Correct") and st.session_state.reveal:
                             st.success("Great job!")
                             st.session_state.correct_count += 1
                             if st.session_state.current_index == len(st.session_state.flashcards) - 1:
@@ -129,7 +129,7 @@ def main():
                                 st.session_state.current_index += 1
                                 st.session_state.reveal = False
                     with col2:
-                        if st.button("Incorrect", disabled=not st.session_state.reveal):
+                        if st.button("Incorrect") and st.session_state.reveal:
                             st.warning("Keep trying!")
                             st.session_state.incorrect_count += 1
                             if st.session_state.current_index == len(st.session_state.flashcards) - 1:
@@ -138,7 +138,7 @@ def main():
                                 st.session_state.current_index += 1
                                 st.session_state.reveal = False
             else:
-                if st.button("Reveal Answer", disabled=st.session_state.reveal):
+                if st.button("Reveal Answer") and not st.session_state.reveal:
                     st.session_state.reveal = True
 
             # End Session Button
