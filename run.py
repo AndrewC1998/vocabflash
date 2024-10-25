@@ -24,20 +24,21 @@ def main():
         flashcards = list(data.itertuples(index=False, name=None))
         random.shuffle(flashcards)
 
-        # Initialize session state for the current card
-        if 'current_card' not in st.session_state:
-            st.session_state.current_card = random.choice(flashcards)
+        # Initialize session state for the current card index
+        if 'current_index' not in st.session_state:
+            st.session_state.current_index = 0
 
         # Display the current flashcard question
-        st.write(f"### {st.session_state.current_card[0]}")
+        current_card = flashcards[st.session_state.current_index]
+        st.write(f"### {current_card[0]}")
 
         # Reveal answer button
         if st.button("Reveal Answer"):
-            st.write(f"**Answer:** {st.session_state.current_card[1]}")
+            st.write(f"**Answer:** {current_card[1]}")
 
         # Next card button
         if st.button("Next Card"):
-            st.session_state.current_card = random.choice(flashcards)
+            st.session_state.current_index = (st.session_state.current_index + 1) % len(flashcards)
             st.experimental_rerun()
 
 if __name__ == "__main__":
