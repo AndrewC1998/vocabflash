@@ -1,15 +1,3 @@
-import streamlit as st
-import pandas as pd
-import random
-import os
-
-# Streamlit Flashcard App
-def main():
-    st.set_page_config(page_title="Flashcard App", layout="wide")
-    st.title("Flashcard App")
-
-    # Print current working directory for debugging
-    st.write(f"Current working directory: {os.getcwd()}")
 
     # Dropdown menu for selecting example CSVs
     language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
@@ -26,7 +14,7 @@ def main():
     # Load the appropriate CSV
     data = None
     if language in ["French", "German", "Spanish"] and level is not None:
-        file_path = f"Data/{language}/{language}_{level}.csv"
+        file_path = os.path.abspath(os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv"))
         if os.path.exists(file_path):
             data = pd.read_csv(file_path)
         else:
