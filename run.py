@@ -1,5 +1,4 @@
-
-    # Dropdown menu for selecting example CSVs
+# Dropdown menu for selecting example CSVs
     language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
     level = None
     theme_colors = {
