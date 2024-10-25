@@ -33,7 +33,7 @@ def main():
 
     if data is not None:
         flashcards = list(data.itertuples(index=False, name=None))
-        random.shuffle(flashcards)
+
 
         # Initialize session state for the current card index, reveal state, and score tracking
         if 'current_index' not in st.session_state:
@@ -62,10 +62,12 @@ def main():
                 st.session_state.incorrect_count = 0
                 st.session_state.reveal = False
                 st.session_state.session_ended = False
-                random.shuffle(flashcards)
+                random.shuffle(st.session_state.flashcards)
         else:
             # Immersive view when a specific language and level are selected
-            current_card = flashcards[st.session_state.current_index]
+            if 'flashcards' not in st.session_state:
+            st.session_state.flashcards = flashcards
+        current_card = st.session_state.flashcards[st.session_state.current_index]
             question, answer = current_card[0], current_card[1]
 
             # Layout for flashcard display
