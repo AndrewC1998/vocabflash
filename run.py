@@ -127,7 +127,6 @@ def main():
                             else:
                                 st.session_state.current_index += 1
                                 st.session_state.reveal = False
-                            st.session_state.trigger_update = not st.session_state.get('trigger_update', False)
                     with col2:
                         if st.button("Incorrect", key='incorrect_button'):
                             st.session_state.incorrect_count += 1
@@ -136,11 +135,9 @@ def main():
                             else:
                                 st.session_state.current_index += 1
                                 st.session_state.reveal = False
-                            st.experimental_rerun()
             else:
                 if st.button("Reveal Answer", key='reveal_button'):
                     st.session_state.reveal = True
-                    st.experimental_rerun()
 
             # End Session Button
             if st.button("End Session"):
