@@ -4,12 +4,6 @@ import random
 
 # Streamlit Flashcard App
 def main():
-    st.set_page_config(page_title="Flashcard App", layout="wide")
-    st.title("Flashcard App")
-
-                """, unsafe_allow_html=True
-        )
-
     # Dropdown menu for selecting example CSVs
     language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
     level = None
