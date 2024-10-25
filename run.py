@@ -145,9 +145,9 @@ def main():
                 st.session_state.current_index = 0
 
         # Total display and Restart Button
-        st.markdown("## Total")
-        st.write(f"Total Correct: {st.session_state.correct_count}")
-        st.write(f"Total Incorrect: {st.session_state.incorrect_count}")
+        if st.session_state.correct_count + st.session_state.incorrect_count > 0:
+            accuracy = (st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count)) * 100
+            st.write(f"Current Accuracy: {accuracy:.2f}%")
         if st.button("Restart Session"):
             st.session_state.current_index = 0
             st.session_state.correct_count = 0
