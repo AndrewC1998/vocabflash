@@ -20,6 +20,7 @@ def main():
     import os
     st.write("Current directory contents:", os.listdir(os.getcwd()))
     if language in ["French", "German", "Spanish"] and level is not None:
+        st.write("Contents of 'Data' directory:", os.listdir(os.path.join(os.getcwd(), 'Data')))
         file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
         if os.path.exists(file_path):
             st.write(f"Attempting to read file from: {file_path}")
