@@ -7,22 +7,7 @@ def main():
     st.set_page_config(page_title="Flashcard App", layout="wide")
     st.title("Flashcard App")
 
-    # Dark mode toggle
-    dark_mode = st.button("🌙", key="dark_mode_toggle", help="Toggle Dark Mode")
-    if dark_mode:
-        st.markdown(
-            """
-            <style>
-            .main, .sidebar-content {
-                background-color: #333 !important;
-                color: #f0f0f0 !important;
-            }
-            .flashcard-box {
-                background-color: #444;
-                color: #f0f0f0;
-            }
-            </style>
-            """, unsafe_allow_html=True
+                """, unsafe_allow_html=True
         )
 
     # Dropdown menu for selecting example CSVs
@@ -63,8 +48,8 @@ def main():
             st.session_state.session_ended = False
 
         # Set themed color for the selected language
-        card_background_color = theme_colors.get(language, "#f0f0f5") if not dark_mode else "#444"
-        answer_background_color = "#dff0d8" if not dark_mode else "#555"
+        card_background_color = theme_colors.get(language, "#f0f0f5")
+        answer_background_color = "#dff0d8"
 
         # End session summary
         if st.session_state.session_ended:
