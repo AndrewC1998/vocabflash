@@ -125,7 +125,7 @@ def main():
             st.header("Session Summary")
             accuracy = 100 * st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count)
             st.markdown(f"<div class='accuracy'>Your current accuracy is <strong>{accuracy:.2f}%</strong></div>", unsafe_allow_html=True)
-                        if st.button("Restart Session"):
+            if st.button("Restart Session"):
                 st.session_state.current_index = 0
                 st.session_state.correct_count = 0
                 st.session_state.incorrect_count = 0
