@@ -40,6 +40,30 @@ def main():
                 box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
                 transition: transform 0.4s;
             }
+            .center-button {
+                display: flex;
+                justify-content: center;
+                margin: 20px 0;
+            }
+            .side-buttons {
+                display: flex;
+                justify-content: space-between;
+                margin: 20px 0;
+            }
+            .bottom-buttons {
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .accuracy {
+                text-align: center;
+                font-size: 20px;
+                margin-top: 20px;
+                color: #333;
+            }
         </style>
         """,
         unsafe_allow_html=True
@@ -99,9 +123,9 @@ def main():
         # End session summary
         if st.session_state.session_ended:
             st.header("Session Summary")
-            st.subheader(f"Accuracy: {100 * st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count):.2f}%")
-            st.progress(st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count))
-            if st.button("Restart Session"):
+            accuracy = 100 * st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count)
+            st.markdown(f"<div class='accuracy'>Your current accuracy is <strong>{accuracy:.2f}%</strong></div>", unsafe_allow_html=True)
+                        if st.button("Restart Session"):
                 st.session_state.current_index = 0
                 st.session_state.correct_count = 0
                 st.session_state.incorrect_count = 0
@@ -121,40 +145,41 @@ def main():
                 st.markdown(f"<div class='answer'><strong>Answer:</strong> {answer}</div>", unsafe_allow_html=True)
 
                 # Buttons for correct and incorrect
-                col1, col2 = st.columns(2)
-                with col1:
-                    if st.button("Correct", key='correct_button'):
-                        st.session_state.correct_count += 1
-                        if st.session_state.current_index == len(st.session_state.flashcards) - 1:
-                            st.session_state.session_ended = True
-                        else:
-                            st.session_state.current_index += 1
-                            st.session_state.reveal = False
-                with col2:
-                    if st.button("Incorrect", key='incorrect_button'):
-                        st.session_state.incorrect_count += 1
-                        if st.session_state.current_index == len(st.session_state.flashcards) - 1:
-                            st.session_state.session_ended = True
-                        else:
-                            st.session_state.current_index += 1
-                            st.session_state.reveal = False
+                st.markdown("<div class='side-buttons'>", unsafe_allow_html=True)
+                if st.button("Correct", key='correct_button', help="Click if your answer was correct"):
+                    st.session_state.correct_count += 1
+                    if st.session_state.current_index == len(st.session_state.flashcards) - 1:
+                        st.session_state.session_ended = True
+                    else:
+                        st.session_state.current_index += 1
+                        st.session_state.reveal = False
+                if st.button("Incorrect", key='incorrect_button', help="Click if your answer was incorrect"):
+                    st.session_state.incorrect_count += 1
+                    if st.session_state.current_index == len(st.session_state.flashcards) - 1:
+                        st.session_state.session_ended = True
+                    else:
+                        st.session_state.current_index += 1
+                        st.session_state.reveal = False
+                st.markdown("</div>", unsafe_allow_html=True)
             else:
-                if st.button("Reveal Answer", key='reveal_button'):
+                st.markdown("<div class='center-button'>", unsafe_allow_html=True)
+                if st.button("Reveal Answer", key='reveal_button', help="Click to reveal the answer"):
                     st.session_state.reveal = True
+                st.markdown("</div>", unsafe_allow_html=True)
 
-            # End Session Button
-            if st.button("End Session"):
+            # Bottom Buttons for Restart and End Session
+            st.markdown("<div class='bottom-buttons'>", unsafe_allow_html=True)
+            if st.button("Restart Session", key='restart_button', help="Click to restart the session"):
+                st.session_state.current_index = 0
+                st.session_state.correct_count = 0
+                st.session_state.incorrect_count = 0
+                st.session_state.reveal = False
+                st.session_state.session_ended = False
+                random.shuffle(st.session_state.flashcards)
+            if st.button("End Session", key='end_button', help="Click to end the session"):
                 st.session_state.session_ended = True
                 st.session_state.current_index = 0
-
-        # Total display and Restart Button
-        if st.button("Restart Session"):
-            st.session_state.current_index = 0
-            st.session_state.correct_count = 0
-            st.session_state.incorrect_count = 0
-            st.session_state.reveal = False
-            st.session_state.session_ended = False
-            random.shuffle(st.session_state.flashcards)
+            st.markdown("</div>", unsafe_allow_html=True)
 
     # Close Main Container
     st.markdown("</div>", unsafe_allow_html=True)
