@@ -18,7 +18,7 @@ def main():
 
     # Load the appropriate CSV
     if language in ["French", "German", "Spanish"] and level is not None:
-        data = pd.read_csv(f"data/{language}/{language}_{level}.csv")
+        data = pd.read_csv(f"Data/French/French_A1.csv")
     else:
         data = None
         uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
