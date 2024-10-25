@@ -93,51 +93,53 @@ def main():
                 </div>
             """, unsafe_allow_html=True)
 
-            if st.session_state.reveal:
-                st.markdown(f"""
-                    <style>
-                    .flashcard-box {{
-                        background-color: {answer_background_color};
-                        padding: 40px;
-                        border-radius: 15px;
-                        text-align: center;
-                        font-size: 28px;
-                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                        transition: transform 0.3s;
-                    }}
-                    .flashcard-box:hover {{
-                        transform: scale(1.05);
-                    }}
-                    </style>
+            # Flashcard Actions Form
+            with st.form(key="flashcard_form"):
+                if st.session_state.reveal:
+                    st.markdown(f"""
+                        <style>
+                        .flashcard-box {{
+                            background-color: {answer_background_color};
+                            padding: 40px;
+                            border-radius: 15px;
+                            text-align: center;
+                            font-size: 28px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            transition: transform 0.3s;
+                        }}
+                        .flashcard-box:hover {{
+                            transform: scale(1.05);
+                        }}
+                        </style>
 
-                    <div class="flashcard-box">
-                        <p><strong>Answer:</strong> {answer}</p>
-                    </div>
-                """, unsafe_allow_html=True)
+                        <div class="flashcard-box">
+                            <p><strong>Answer:</strong> {answer}</p>
+                        </div>
+                    """, unsafe_allow_html=True)
 
-                # Buttons for correct and incorrect
-                button_container = st.container() if st.session_state.reveal else st.empty()
-                with button_container:
                     col1, col2 = st.columns(2)
                     with col1:
-                        if st.button("Correct", key='correct_button'):
-                            st.session_state.correct_count += 1
-                            if st.session_state.current_index == len(st.session_state.flashcards) - 1:
-                                st.session_state.session_ended = True
-                            else:
-                                st.session_state.current_index += 1
-                                st.session_state.reveal = False
+                        correct = st.form_submit_button("Correct", key='correct_button')
                     with col2:
-                        if st.button("Incorrect", key='incorrect_button'):
-                            st.session_state.incorrect_count += 1
-                            if st.session_state.current_index == len(st.session_state.flashcards) - 1:
-                                st.session_state.session_ended = True
-                            else:
-                                st.session_state.current_index += 1
-                                st.session_state.reveal = False
-            else:
-                if st.button("Reveal Answer", key='reveal_button'):
-                    st.session_state.reveal = True
+                        incorrect = st.form_submit_button("Incorrect", key='incorrect_button')
+
+                    if correct:
+                        st.session_state.correct_count += 1
+                        st.session_state.reveal = False
+                        if st.session_state.current_index == len(st.session_state.flashcards) - 1:
+                            st.session_state.session_ended = True
+                        else:
+                            st.session_state.current_index += 1
+                    elif incorrect:
+                        st.session_state.incorrect_count += 1
+                        st.session_state.reveal = False
+                        if st.session_state.current_index == len(st.session_state.flashcards) - 1:
+                            st.session_state.session_ended = True
+                        else:
+                            st.session_state.current_index += 1
+                else:
+                    if st.form_submit_button("Reveal Answer", key='reveal_button'):
+                        st.session_state.reveal = True
 
             # End Session Button
             if st.button("End Session"):
