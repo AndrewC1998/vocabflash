@@ -129,11 +129,6 @@ def main():
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
             st.session_state.data = data
-    else:
-        data = st.session_state.data
-        uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
-        if uploaded_file is not None:
-            data = pd.read_csv(uploaded_file)
 
     if data is not None and language != "None" and level is not None:
         # Shuffle flashcards only once and store in session state
