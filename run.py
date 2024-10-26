@@ -74,46 +74,16 @@ def main():
     st.markdown("<div class='main-container'>", unsafe_allow_html=True)
 
     # Dropdown menu for selecting example CSVs
-    if 'language' not in st.session_state or 'level' not in st.session_state:
-        language = st.selectbox("Language", ["None", "French", "German", "Spanish"], key='language_select')
-        if language != "None":
-            level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"], key='level_select')
-            if level:
-                st.session_state.language = language
-                st.session_state.level = level
-
-    else:
-        language = st.session_state.language
-        level = st.session_state.level
-
+    language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
+    level = None
     theme_colors = {
         "French": "#ffdfba",
         "German": "#d4a5a5",
         "Spanish": "#ffe6e6"
     }
 
-    # Load the appropriate CSV only after both language and level are selected
-    if language in ["French", "German", "Spanish"] and level is not None:
-        if 'data' not in st.session_state:
-            file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
-            if os.path.exists(file_path):
-                data = pd.read_csv(file_path)
-                st.session_state.data = data
-            else:
-                st.error(f"File not found: {file_path}. Please check the path and try again.")
-                data = None
-        else:
-            data = st.session_state.data
-    elif 'data' in st.session_state:
-        data = st.session_state.data
-    else:
-        data = None
-
-    theme_colors = {
-        "French": "#ffdfba",
-        "German": "#d4a5a5",
-        "Spanish": "#ffe6e6"
-    }
+    if language != "None":
+        level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"])
 
     # Load the appropriate CSV
     if language in ["French", "German", "Spanish"] and level is not None:
@@ -128,9 +98,8 @@ def main():
         uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
-            st.session_state.data = data
 
-    if data is not None and language != "None" and level is not None:
+    if data is not None:
         # Shuffle flashcards only once and store in session state
         if 'flashcards' not in st.session_state:
             flashcards = list(data.itertuples(index=False, name=None))
