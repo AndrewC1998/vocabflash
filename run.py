@@ -74,16 +74,25 @@ def main():
     st.markdown("<div class='main-container'>", unsafe_allow_html=True)
 
     # Dropdown menu for selecting example CSVs
-    language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
-    level = None
+    if 'language' not in st.session_state:
+        language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
+        st.session_state.language = language
+    else:
+        language = st.session_state.language
+
+    if language != "None" and 'level' not in st.session_state:
+        level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"])
+        st.session_state.level = level
+    elif 'level' in st.session_state:
+        level = st.session_state.level
+    else:
+        level = None
+
     theme_colors = {
         "French": "#ffdfba",
         "German": "#d4a5a5",
         "Spanish": "#ffe6e6"
     }
-
-    if language != "None":
-        level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"])
 
     # Load the appropriate CSV
     if language in ["French", "German", "Spanish"] and level is not None:
@@ -93,8 +102,14 @@ def main():
         else:
             st.error(f"File not found: {file_path}. Please check the path and try again.")
             data = None
-    else:
+    elif 'data' not in st.session_state:
         data = None
+        uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
+        if uploaded_file is not None:
+            data = pd.read_csv(uploaded_file)
+            st.session_state.data = data
+    else:
+        data = st.session_state.data
         uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
