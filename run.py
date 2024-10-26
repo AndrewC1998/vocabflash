@@ -70,22 +70,18 @@ def main():
                 color: #000;
             }
         </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Main Container
-    st.markdown(
-        """
         <script>
-            // JavaScript to simulate double-click for buttons
+            // JavaScript to simulate double-click for specific buttons
             document.addEventListener('DOMContentLoaded', function() {
-                const buttons = document.querySelectorAll('button');
-                buttons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        setTimeout(() => {
-                            button.click();
-                        }, 100);
+                const buttonLabels = ['Correct', 'Incorrect', 'Reveal Answer'];
+                buttonLabels.forEach(label => {
+                    const buttons = Array.from(document.querySelectorAll('button')).filter(button => button.innerText.includes(label));
+                    buttons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            setTimeout(() => {
+                                button.click();
+                            }, 100);
+                        });
                     });
                 });
             });
@@ -93,6 +89,8 @@ def main():
         """,
         unsafe_allow_html=True
     )
+
+    # Main Container
     st.markdown("<div class='main-container'>", unsafe_allow_html=True)
 
     # Dropdown menu for selecting example CSVs
