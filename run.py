@@ -117,6 +117,10 @@ def main():
             st.session_state.incorrect_count = 0
         if 'session_ended' not in st.session_state:
             st.session_state.session_ended = False
+        if 'correct_answers' not in st.session_state:
+            st.session_state.correct_answers = []
+        if 'incorrect_answers' not in st.session_state:
+            st.session_state.incorrect_answers = []
 
         # Set themed color for the selected language
         card_background_color = theme_colors.get(language, "#f0f0f5")
@@ -128,12 +132,23 @@ def main():
             accuracy = 100 * st.session_state.correct_count / total_attempted
             st.markdown(f"<div class='accuracy'>You answered <strong>{total_attempted}</strong> questions in total.</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='accuracy'>Your accuracy was <strong>{accuracy:.2f}%</strong></div>", unsafe_allow_html=True)
+
+            # Expandable sections for correct and incorrect answers
+            with st.expander("View Correct Answers"):
+                correct_df = pd.DataFrame(st.session_state.correct_answers, columns=["Question", "Answer"])
+                st.table(correct_df)
+            with st.expander("View Incorrect Answers"):
+                incorrect_df = pd.DataFrame(st.session_state.incorrect_answers, columns=["Question", "Answer"])
+                st.table(incorrect_df)
+
             if st.button("Restart Session", key='restart_summary'):
                 st.session_state.current_index = 0
                 st.session_state.correct_count = 0
                 st.session_state.incorrect_count = 0
                 st.session_state.reveal = False
                 st.session_state.session_ended = False
+                st.session_state.correct_answers = []
+                st.session_state.incorrect_answers = []
                 random.shuffle(st.session_state.flashcards)
         else:
             # Immersive view when a specific language and level are selected
@@ -153,6 +168,7 @@ def main():
                 with col1:
                     if st.button("Correct", key='correct_button', help="Click if your answer was correct", use_container_width=True):
                         st.session_state.correct_count += 1
+                        st.session_state.correct_answers.append((question, answer))
                         if st.session_state.current_index == len(st.session_state.flashcards) - 1:
                             st.session_state.session_ended = True
                         else:
@@ -161,6 +177,7 @@ def main():
                 with col2:
                     if st.button("Incorrect", key='incorrect_button', help="Click if your answer was incorrect", use_container_width=True):
                         st.session_state.incorrect_count += 1
+                        st.session_state.incorrect_answers.append((question, answer))
                         if st.session_state.current_index == len(st.session_state.flashcards) - 1:
                             st.session_state.session_ended = True
                         else:
@@ -183,6 +200,8 @@ def main():
                     st.session_state.incorrect_count = 0
                     st.session_state.reveal = False
                     st.session_state.session_ended = False
+                    st.session_state.correct_answers = []
+                    st.session_state.incorrect_answers = []
                     random.shuffle(st.session_state.flashcards)
             with col2:
                 if st.button("End Session", key='end_button', help="Click to end the session", use_container_width=True):
