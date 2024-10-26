@@ -141,8 +141,8 @@ def main():
                 accuracy = 0
             else:
                 accuracy = 100 * st.session_state.correct_count / total_attempted
-            st.markdown(f"<div class='accuracy'>You answered <strong>{total_attempted}</strong> questions in total.</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='accuracy'>Your accuracy was <strong>{accuracy:.2f}%</strong></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='accuracy' style='color: inherit;'><div class='accuracy'>You answered <strong>{total_attempted}</strong> questions in total.</div></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='accuracy' style='color: inherit;'><div class='accuracy'>Your accuracy was <strong>{accuracy:.2f}%</strong></div></div>", unsafe_allow_html=True)
 
             # Expandable sections for correct and incorrect answers
             with st.expander("View Correct Answers"):
