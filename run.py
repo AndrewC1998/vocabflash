@@ -141,8 +141,8 @@ def main():
             question, answer = current_card[0], current_card[1]
 
             # Reveal Answer button
-            st.markdown("<div class='center-button'>", unsafe_allow_html=True)
-            if st.button("Reveal Answer", key='reveal_button', help="Click to reveal the answer", use_container_width=True, button_color=theme_colors.get(language, "#dff0d8")):
+            st.markdown(f"<div class='center-button' style='background-color: {theme_colors.get(language, '#dff0d8')}; padding: 15px; border-radius: 10px; text-align: center;'>", unsafe_allow_html=True)
+            if st.button("Reveal Answer", key='reveal_button', help="Click to reveal the answer", use_container_width=True):
                 st.session_state.reveal = True
             st.markdown("</div>", unsafe_allow_html=True)
 
