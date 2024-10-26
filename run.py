@@ -62,7 +62,7 @@ def main():
                 text-align: center;
                 font-size: 20px;
                 margin-top: 20px;
-                color: #333;
+                color: inherit;
             }
             .button-large {
                 font-size: 20px;
@@ -141,8 +141,8 @@ def main():
                 accuracy = 0
             else:
                 accuracy = 100 * st.session_state.correct_count / total_attempted
-            st.markdown(f"<div class='accuracy' style='color: inherit;'><div class='accuracy'>You answered <strong>{total_attempted}</strong> questions in total.</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='accuracy' style='color: inherit;'><div class='accuracy'>Your accuracy was <strong>{accuracy:.2f}%</strong></div></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='accuracy' style='color: inherit;'><div class='accuracy'>You answered <strong>{total_attempted}</strong> questions in total.</div></div></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='accuracy' style='color: inherit;'><div class='accuracy'>Your accuracy was <strong>{accuracy:.2f}%</strong></div></div></div>", unsafe_allow_html=True)
 
             # Expandable sections for correct and incorrect answers
             with st.expander("View Correct Answers"):
