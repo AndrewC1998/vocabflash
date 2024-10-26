@@ -84,6 +84,9 @@ def main():
     else:
         language = st.session_state.language
         level = st.session_state.level
+    else:
+        language = st.session_state.language
+        level = st.session_state.level
 
     theme_colors = {
         "French": "#ffdfba",
@@ -131,7 +134,7 @@ def main():
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
 
-    if data is not None and 'language' in st.session_state and 'level' in st.session_state:
+    if data is not None and language != "None" and level is not None:
         # Shuffle flashcards only once and store in session state
         if 'flashcards' not in st.session_state:
             flashcards = list(data.itertuples(index=False, name=None))
