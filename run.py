@@ -70,22 +70,18 @@ def main():
                 color: #000;
             }
         </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Main Container
-    st.markdown(
-        """
         <script>
-            // JavaScript to simulate double-click for buttons
+            // JavaScript to simulate double-click for specific buttons
             document.addEventListener('DOMContentLoaded', function() {
-                const buttons = document.querySelectorAll('button');
-                buttons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        setTimeout(() => {
-                            button.click();
-                        }, 100);
+                const buttonLabels = ['Correct', 'Incorrect', 'Reveal Answer'];
+                buttonLabels.forEach(label => {
+                    const buttons = Array.from(document.querySelectorAll('button')).filter(button => button.innerText.includes(label));
+                    buttons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            setTimeout(() => {
+                                button.click();
+                            }, 100);
+                        });
                     });
                 });
             });
@@ -93,6 +89,8 @@ def main():
         """,
         unsafe_allow_html=True
     )
+
+    # Main Container
     st.markdown("<div class='main-container'>", unsafe_allow_html=True)
 
     # Dropdown menu for selecting example CSVs
@@ -111,6 +109,7 @@ def main():
     data = None
     if language in ["French", "German", "Spanish"] and level is not None and 'data' not in st.session_state:
         if st.button("Confirm Selection", key='confirm_selection'):
+            st.session_state.selection_confirmed = True
             file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
             if os.path.exists(file_path):
                 data = pd.read_csv(file_path)
@@ -196,6 +195,7 @@ def main():
                 col1, col2 = st.columns(2)
                 with col1:
                     if st.button("Correct", key='correct_button', use_container_width=True):
+                        st.session_state.correct_pressed = True
                         st.session_state.correct_count += 1
                         st.session_state.correct_answers.append((question, answer))
                         if st.session_state.current_index == len(st.session_state.flashcards) - 1:
@@ -205,6 +205,7 @@ def main():
                             st.session_state.reveal = False
                 with col2:
                     if st.button("Incorrect", key='incorrect_button', use_container_width=True):
+                        st.session_state.incorrect_pressed = True
                         st.session_state.incorrect_count += 1
                         st.session_state.incorrect_answers.append((question, answer))
                         if st.session_state.current_index == len(st.session_state.flashcards) - 1:
@@ -216,6 +217,7 @@ def main():
             else:
                 st.markdown("<div class='center-button'>", unsafe_allow_html=True)
                 if st.button("Reveal Answer", key='reveal_button', use_container_width=True):
+                    st.session_state.reveal = True
                     st.session_state.reveal = True
                 st.markdown("</div>", unsafe_allow_html=True)
 
