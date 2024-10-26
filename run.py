@@ -91,6 +91,26 @@ def main():
         "Spanish": "#ffe6e6"
     }
 
+    # Load the appropriate CSV only after both language and level are selected
+    if language in ["French", "German", "Spanish"] and level is not None:
+        file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
+        if os.path.exists(file_path):
+            data = pd.read_csv(file_path)
+            st.session_state.data = data
+        else:
+            st.error(f"File not found: {file_path}. Please check the path and try again.")
+            data = None
+    elif 'data' in st.session_state:
+        data = st.session_state.data
+    else:
+        data = None
+
+    theme_colors = {
+        "French": "#ffdfba",
+        "German": "#d4a5a5",
+        "Spanish": "#ffe6e6"
+    }
+
     # Load the appropriate CSV
     if language in ["French", "German", "Spanish"] and level is not None:
         file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
@@ -111,7 +131,7 @@ def main():
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
 
-    if data is not None:
+    if data is not None and 'language' in st.session_state and 'level' in st.session_state:
         # Shuffle flashcards only once and store in session state
         if 'flashcards' not in st.session_state:
             flashcards = list(data.itertuples(index=False, name=None))
