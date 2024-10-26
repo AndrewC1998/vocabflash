@@ -178,30 +178,30 @@ def main():
                 st.markdown("<div class='side-buttons'>", unsafe_allow_html=True)
                 col1, col2 = st.columns(2)
                 with col1:
-                    if st.button("Correct", key='correct_button'):
-    st.session_state.correct_count += 1
-    st.session_state.correct_answers.append((question, answer))
+    if st.button("Correct", key='correct_button'):
+        st.session_state.correct_count += 1
+            st.session_state.correct_answers.append((question, answer))
+                    if st.session_state.current_index == len(st.session_state.flashcards) - 1:
+            st.session_state.session_ended = True
+                    else:
+            st.session_state.current_index += 1
+            st.session_state.reveal = False
+
+                with col2:
+    if st.button("Incorrect", key='incorrect_button'):
+        st.session_state.incorrect_count += 1
+            st.session_state.incorrect_answers.append((question, answer))
     if st.session_state.current_index == len(st.session_state.flashcards) - 1:
         st.session_state.session_ended = True
     else:
         st.session_state.current_index += 1
         st.session_state.reveal = False
 
-                with col2:
-                    if st.button("Incorrect", key='incorrect_button'):
-    st.session_state.incorrect_count += 1
-    st.session_state.incorrect_answers.append((question, answer))
-    if st.session_state.current_index == len(st.session_state.flashcards) - 1:
-        st.session_state.session_ended = True
-    else:
-        st.session_state.current_index += 1
-        st.session_state.reveal = False
-    st.experimental_set_query_params(current_index=st.session_state.current_index)
                 st.markdown("</div>", unsafe_allow_html=True)
             else:
                 st.markdown("<div class='center-button'>", unsafe_allow_html=True)
                 if st.button("Reveal Answer", key='reveal_button', use_container_width=True):
-    st.session_state.reveal = True
+        st.session_state.reveal = True
     st.experimental_set_query_params(reveal=True)
 
                 st.markdown("</div>", unsafe_allow_html=True)
