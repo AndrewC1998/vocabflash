@@ -75,24 +75,6 @@ def main():
     )
 
     # Main Container
-    st.markdown(
-        """
-        <script>
-            // JavaScript to simulate double-click for buttons
-            document.addEventListener('DOMContentLoaded', function() {
-                const buttons = document.querySelectorAll('button');
-                buttons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        setTimeout(() => {
-                            button.click();
-                        }, 100);
-                    });
-                });
-            });
-        </script>
-        """,
-        unsafe_allow_html=True
-    )
     st.markdown("<div class='main-container'>", unsafe_allow_html=True)
 
     # Dropdown menu for selecting example CSVs
