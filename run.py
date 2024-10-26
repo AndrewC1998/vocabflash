@@ -70,25 +70,6 @@ def main():
                 color: #000;
             }
         </style>
-<script>
-    // JavaScript to add event listeners to button clicks for improved responsiveness
-    document.addEventListener('DOMContentLoaded', function() {
-        const buttons = document.querySelectorAll('button');
-        buttons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                // Prevent default double-click behavior
-                event.preventDefault();
-                // Trigger button click once to ensure only one action is taken
-                if (!button.classList.contains('clicked')) {
-                    button.classList.add('clicked');
-                    setTimeout(() => {
-                        button.classList.remove('clicked');
-                    }, 300);
-                }
-            });
-        });
-    });
-</script>
         <script>
             // JavaScript to simulate double-click for specific buttons
             document.addEventListener('DOMContentLoaded', function() {
@@ -127,10 +108,7 @@ def main():
     # Load the appropriate CSV only after a level is selected
     data = None
     if language in ["French", "German", "Spanish"] and level is not None and 'data' not in st.session_state:
-        if st.button("Confirm Selection", key='confirm_selection') :
-                        st.session_state.selection_confirmed = True
-
-    if 'selection_confirmed' in st.session_state and st.session_state.selection_confirmed:
+        if st.button("Confirm Selection", key='confirm_selection'):
             st.session_state.selection_confirmed = True
             file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
             if os.path.exists(file_path):
@@ -152,7 +130,6 @@ def main():
             flashcards = list(data.itertuples(index=False, name=None))
             random.shuffle(flashcards)
             st.session_state.flashcards = flashcards
-
 
         # Initialize session state for the current card index, reveal state, and score tracking
         if 'current_index' not in st.session_state:
@@ -192,8 +169,7 @@ def main():
                 incorrect_df = pd.DataFrame(st.session_state.incorrect_answers, columns=["Question", "Answer"])
                 st.table(incorrect_df)
 
-            if st.button("Restart Session", key='restart_summary') and time.time() - st.session_state.last_interaction > 0.5:
-                st.session_state.last_interaction = time.time()
+            if st.button("Restart Session", key='restart_summary'):
                 st.session_state.current_index = 0
                 st.session_state.correct_count = 0
                 st.session_state.incorrect_count = 0
@@ -218,11 +194,7 @@ def main():
                 st.markdown("<div class='side-buttons'>", unsafe_allow_html=True)
                 col1, col2 = st.columns(2)
                 with col1:
-                    if st.button("Correct", key='correct_button', use_container_width=True) and time.time() - st.session_state.last_interaction > 0.5:
-                        st.session_state.last_interaction = time.time()
-                        st.session_state.correct_pressed = True
-
-    if 'correct_pressed' in st.session_state and st.session_state.correct_pressed:
+                    if st.button("Correct", key='correct_button', use_container_width=True):
                         st.session_state.correct_pressed = True
                         st.session_state.correct_count += 1
                         st.session_state.correct_answers.append((question, answer))
@@ -232,11 +204,7 @@ def main():
                             st.session_state.current_index += 1
                             st.session_state.reveal = False
                 with col2:
-                    if st.button("Incorrect", key='incorrect_button', use_container_width=True) and time.time() - st.session_state.last_interaction > 0.5:
-                        st.session_state.last_interaction = time.time()
-                        st.session_state.incorrect_pressed = True
-
-    if 'incorrect_pressed' in st.session_state and st.session_state.incorrect_pressed:
+                    if st.button("Incorrect", key='incorrect_button', use_container_width=True):
                         st.session_state.incorrect_pressed = True
                         st.session_state.incorrect_count += 1
                         st.session_state.incorrect_answers.append((question, answer))
@@ -248,11 +216,7 @@ def main():
                 st.markdown("</div>", unsafe_allow_html=True)
             else:
                 st.markdown("<div class='center-button'>", unsafe_allow_html=True)
-                if st.button("Reveal Answer", key='reveal_button', use_container_width=True) and time.time() - st.session_state.last_interaction > 0.5:
-                    st.session_state.last_interaction = time.time()
-                    st.session_state.reveal = True
-
-    if 'reveal' in st.session_state and st.session_state.reveal:
+                if st.button("Reveal Answer", key='reveal_button', use_container_width=True):
                     st.session_state.reveal = True
                     st.session_state.reveal = True
                 st.markdown("</div>", unsafe_allow_html=True)
@@ -261,8 +225,7 @@ def main():
             st.markdown("<div class='bottom-buttons'>", unsafe_allow_html=True)
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("Restart Session", key='restart_button', use_container_width=True) and time.time() - st.session_state.last_interaction > 0.5:
-                    st.session_state.last_interaction = time.time()
+                if st.button("Restart Session", key='restart_button', use_container_width=True):
                     st.session_state.current_index = 0
                     st.session_state.correct_count = 0
                     st.session_state.incorrect_count = 0
@@ -272,8 +235,7 @@ def main():
                     st.session_state.incorrect_answers = []
                     random.shuffle(st.session_state.flashcards)
             with col2:
-                if st.button("End Session", key='end_button', use_container_width=True) and time.time() - st.session_state.last_interaction > 0.5:
-                    st.session_state.last_interaction = time.time()
+                if st.button("End Session", key='end_button', use_container_width=True):
                     st.session_state.session_ended = True
             st.markdown("</div>", unsafe_allow_html=True)
 
