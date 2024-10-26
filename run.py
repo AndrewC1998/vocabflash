@@ -91,9 +91,8 @@ def main():
 
     # Load the appropriate CSV only after a level is selected
     data = None
-    if language in ["French", "German", "Spanish"] and level is not None and 'data' not in st.session_state and 'selection_confirmed' in st.session_state:
-        if st.button("Confirm Selection", key='confirm_selection') and 'selection_confirmed' not in st.session_state:
-            st.session_state.selection_confirmed = True
+    if language in ["French", "German", "Spanish"] and level is not None and 'data' not in st.session_state:
+        if st.button("Confirm Selection", key='confirm_selection'):
             file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
             if os.path.exists(file_path):
                 data = pd.read_csv(file_path)
