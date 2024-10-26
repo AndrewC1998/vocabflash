@@ -124,8 +124,10 @@ def main():
         # End session summary
         if st.session_state.session_ended:
             st.header("Session Summary")
-            accuracy = 100 * st.session_state.correct_count / (st.session_state.correct_count + st.session_state.incorrect_count)
-            st.markdown(f"<div class='accuracy'>Your current accuracy is <strong>{accuracy:.2f}%</strong></div>", unsafe_allow_html=True)
+            total_attempted = st.session_state.correct_count + st.session_state.incorrect_count
+            accuracy = 100 * st.session_state.correct_count / total_attempted
+            st.markdown(f"<div class='accuracy'>You answered <strong>{total_attempted}</strong> questions in total.</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='accuracy'>Your accuracy was <strong>{accuracy:.2f}%</strong></div>", unsafe_allow_html=True)
             if st.button("Restart Session", key='restart_summary'):
                 st.session_state.current_index = 0
                 st.session_state.correct_count = 0
@@ -166,10 +168,12 @@ def main():
                             st.session_state.reveal = False
                 st.markdown("</div>", unsafe_allow_html=True)
             else:
-                st.markdown("<div class='center-button'>", unsafe_allow_html=True)
-                if st.button("Reveal Answer", key='reveal_button', help="Click to reveal the answer", use_container_width=True):
-                    st.session_state.reveal = True
-                st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='center-button'><button style='background-color: {theme_colors.get(language, "#dff0d8")}; color: #333; border: none; padding: 15px 30px; font-size: 20px; cursor: pointer; border-radius: 10px;' onclick='document.getElementById(\"answer-div\").style.display=\"block\"'>Reveal Answer</button></div>", unsafe_allow_html=True)
+                if st.session_state.reveal:
+                    st.markdown(f"<div class='answer' id='answer-div' style='display: block;'><strong>Answer:</strong> {answer}</div>", unsafe_allow_html=True)
+                else:
+                    st.markdown(f"<div class='answer' id='answer-div' style='display: none;'><strong>Answer:</strong> {answer}</div>", unsafe_allow_html=True)
+                st.session_state.reveal = True
 
             # Bottom Buttons for Restart and End Session
             st.markdown("<div class='bottom-buttons'>", unsafe_allow_html=True)
