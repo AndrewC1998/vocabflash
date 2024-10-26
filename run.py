@@ -140,6 +140,12 @@ def main():
             current_card = st.session_state.flashcards[st.session_state.current_index]
             question, answer = current_card[0], current_card[1]
 
+            # Reveal Answer button
+            st.markdown("<div class='center-button'>", unsafe_allow_html=True)
+            if st.button("Reveal Answer", key='reveal_button', help="Click to reveal the answer", use_container_width=True, button_color=theme_colors.get(language, "#dff0d8")):
+                st.session_state.reveal = True
+            st.markdown("</div>", unsafe_allow_html=True)
+
             # Display Question
             st.markdown(f"<div class='flashcard'><strong>Question:</strong> {question}</div>", unsafe_allow_html=True)
 
@@ -167,13 +173,6 @@ def main():
                             st.session_state.current_index += 1
                             st.session_state.reveal = False
                 st.markdown("</div>", unsafe_allow_html=True)
-            else:
-                st.markdown(f"<div class='center-button'><button style='background-color: {theme_colors.get(language, "#dff0d8")}; color: #333; border: none; padding: 15px 30px; font-size: 20px; cursor: pointer; border-radius: 10px;' onclick='document.getElementById(\"answer-div\").style.display=\"block\"'>Reveal Answer</button></div>", unsafe_allow_html=True)
-                if st.session_state.reveal:
-                    st.markdown(f"<div class='answer' id='answer-div' style='display: block;'><strong>Answer:</strong> {answer}</div>", unsafe_allow_html=True)
-                else:
-                    st.markdown(f"<div class='answer' id='answer-div' style='display: none;'><strong>Answer:</strong> {answer}</div>", unsafe_allow_html=True)
-                st.session_state.reveal = True
 
             # Bottom Buttons for Restart and End Session
             st.markdown("<div class='bottom-buttons'>", unsafe_allow_html=True)
