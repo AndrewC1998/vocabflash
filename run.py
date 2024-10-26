@@ -74,19 +74,16 @@ def main():
     st.markdown("<div class='main-container'>", unsafe_allow_html=True)
 
     # Dropdown menu for selecting example CSVs
-    if 'language' not in st.session_state:
-        language = st.selectbox("Language", ["None", "French", "German", "Spanish"])
-        st.session_state.language = language
+    if 'language' not in st.session_state or 'level' not in st.session_state:
+        language = st.selectbox("Language", ["None", "French", "German", "Spanish"], key='language_select')
+        if language != "None":
+            level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"], key='level_select')
+            if level:
+                st.session_state.language = language
+                st.session_state.level = level
     else:
         language = st.session_state.language
-
-    if language != "None" and 'level' not in st.session_state:
-        level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"])
-        st.session_state.level = level
-    elif 'level' in st.session_state:
         level = st.session_state.level
-    else:
-        level = None
 
     theme_colors = {
         "French": "#ffdfba",
