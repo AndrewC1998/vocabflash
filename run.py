@@ -95,12 +95,10 @@ def main():
                 st.session_state.data = data
             else:
                 st.error(f"File not found: {file_path}. Please check the path and try again.")
-    elif uploaded_file := st.file_uploader("Upload your flashcards CSV file", type=["csv"]):
-        data = pd.read_csv(uploaded_file)
     elif 'data' in st.session_state:
         data = st.session_state.data
     else:
-        uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"], key='file_upload_2')
+        uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"], key='file_upload')
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
             st.session_state.data = data
