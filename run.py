@@ -100,7 +100,7 @@ def main():
     elif 'data' in st.session_state:
         data = st.session_state.data
     else:
-        uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
+        uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"], key='file_upload_2')
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
             st.session_state.data = data
