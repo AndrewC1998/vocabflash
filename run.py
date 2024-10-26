@@ -129,7 +129,10 @@ def main():
         if st.session_state.session_ended:
             st.header("Session Summary")
             total_attempted = st.session_state.correct_count + st.session_state.incorrect_count
-            accuracy = 100 * st.session_state.correct_count / total_attempted
+            if total_attempted == 0:
+                accuracy = 0
+            else:
+                accuracy = 100 * st.session_state.correct_count / total_attempted
             st.markdown(f"<div class='accuracy'>You answered <strong>{total_attempted}</strong> questions in total.</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='accuracy'>Your accuracy was <strong>{accuracy:.2f}%</strong></div>", unsafe_allow_html=True)
 
