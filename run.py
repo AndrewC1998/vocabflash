@@ -12,6 +12,7 @@ def main():
             body {
                 background-color: #f5f5f5;
                 font-family: 'Arial', sans-serif;
+                color: #000;
             }
             .main-container {
                 max-width: 700px;
@@ -26,6 +27,7 @@ def main():
                 margin: 20px 0;
                 box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
                 transition: transform 0.4s;
+                color: #000;
             }
             .flashcard:hover {
                 transform: translateY(-5px);
@@ -39,6 +41,7 @@ def main():
                 margin: 20px 0;
                 box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
                 transition: transform 0.4s;
+                color: #000;
             }
             .center-button {
                 display: flex;
@@ -64,6 +67,7 @@ def main():
             .button-large {
                 font-size: 20px;
                 padding: 15px 30px;
+                color: #000;
             }
         </style>
         """,
