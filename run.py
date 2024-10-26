@@ -81,9 +81,7 @@ def main():
             if level:
                 st.session_state.language = language
                 st.session_state.level = level
-    else:
-        language = st.session_state.language
-        level = st.session_state.level
+
     else:
         language = st.session_state.language
         level = st.session_state.level
