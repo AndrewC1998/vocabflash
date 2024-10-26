@@ -189,3 +189,28 @@ def main():
                 if st.button("Reveal Answer", key='reveal_button', help="Click to reveal the answer", use_container_width=True):
                     st.session_state.reveal = True
                 st.markdown("</div>", unsafe_allow_html=True)
+
+            # Bottom Buttons for Restart and End Session
+            st.markdown("<div class='bottom-buttons'>", unsafe_allow_html=True)
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Restart Session", key='restart_button', help="Click to restart the session", use_container_width=True):
+                    st.session_state.current_index = 0
+                    st.session_state.correct_count = 0
+                    st.session_state.incorrect_count = 0
+                    st.session_state.reveal = False
+                    st.session_state.session_ended = False
+                    st.session_state.correct_answers = []
+                    st.session_state.incorrect_answers = []
+                    random.shuffle(st.session_state.flashcards)
+            with col2:
+                if st.button("End Session", key='end_button', help="Click to end the session", use_container_width=True):
+                    st.session_state.session_ended = True
+                    st.session_state.current_index = 0
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    # Close Main Container
+    st.markdown("</div>", unsafe_allow_html=True)
+
+if __name__ == "__main__":
+    main()
