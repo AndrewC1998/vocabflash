@@ -140,12 +140,6 @@ def main():
             current_card = st.session_state.flashcards[st.session_state.current_index]
             question, answer = current_card[0], current_card[1]
 
-            # Reveal Answer button
-            st.markdown(f"<div class='center-button' style='background-color: {theme_colors.get(language, '#dff0d8')}; padding: 15px; border-radius: 10px; text-align: center;'>", unsafe_allow_html=True)
-            if st.button("Reveal Answer", key='reveal_button', help="Click to reveal the answer", use_container_width=True):
-                st.session_state.reveal = True
-            st.markdown("</div>", unsafe_allow_html=True)
-
             # Display Question
             st.markdown(f"<div class='flashcard'><strong>Question:</strong> {question}</div>", unsafe_allow_html=True)
 
@@ -172,6 +166,11 @@ def main():
                         else:
                             st.session_state.current_index += 1
                             st.session_state.reveal = False
+                st.markdown("</div>", unsafe_allow_html=True)
+            else:
+                st.markdown("<div class='center-button'>", unsafe_allow_html=True)
+                if st.button("Reveal Answer", key='reveal_button', help="Click to reveal the answer", use_container_width=True):
+                    st.session_state.reveal = True
                 st.markdown("</div>", unsafe_allow_html=True)
 
             # Bottom Buttons for Restart and End Session
