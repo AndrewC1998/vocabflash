@@ -85,19 +85,25 @@ def main():
     if language != "None":
         level = st.selectbox("Level", ["A1", "A2", "B1", "B2", "C1", "C2"])
 
-    # Load the appropriate CSV
+    # Load the appropriate CSV only after a level is selected
+    data = None
     if language in ["French", "German", "Spanish"] and level is not None:
-        file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
-        if os.path.exists(file_path):
-            data = pd.read_csv(file_path)
-        else:
-            st.error(f"File not found: {file_path}. Please check the path and try again.")
-            data = None
+        if st.button("Confirm Selection", key='confirm_selection'):
+            file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
+            if os.path.exists(file_path):
+                data = pd.read_csv(file_path)
+                st.session_state.data = data
+            else:
+                st.error(f"File not found: {file_path}. Please check the path and try again.")
+    elif uploaded_file := st.file_uploader("Upload your flashcards CSV file", type=["csv"]):
+        data = pd.read_csv(uploaded_file)
+    elif 'data' in st.session_state:
+        data = st.session_state.data
     else:
-        data = None
         uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"])
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
+            st.session_state.data = data
 
     if data is not None:
         # Shuffle flashcards only once and store in session state
