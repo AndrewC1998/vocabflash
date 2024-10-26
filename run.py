@@ -87,7 +87,7 @@ def main():
 
     # Load the appropriate CSV only after a level is selected
     data = None
-    if language in ["French", "German", "Spanish"] and level is not None:
+    if language in ["French", "German", "Spanish"] and level is not None and 'data' not in st.session_state:
         if st.button("Confirm Selection", key='confirm_selection'):
             file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
             if os.path.exists(file_path):
@@ -95,7 +95,7 @@ def main():
                 st.session_state.data = data
             else:
                 st.error(f"File not found: {file_path}. Please check the path and try again.")
-    elif 'data' in st.session_state:
+    if 'data' in st.session_state:
         data = st.session_state.data
     else:
         uploaded_file = st.file_uploader("Upload your flashcards CSV file", type=["csv"], key='file_upload')
