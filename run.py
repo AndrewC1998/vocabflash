@@ -110,6 +110,9 @@ def main():
     if language in ["French", "German", "Spanish"] and level is not None and 'data' not in st.session_state:
         if st.button("Confirm Selection", key='confirm_selection'):
             st.session_state.selection_confirmed = True
+
+    if 'selection_confirmed' in st.session_state and st.session_state.selection_confirmed:
+            st.session_state.selection_confirmed = True
             file_path = os.path.join(os.getcwd(), "Data", language, f"{language}_{level}.csv")
             if os.path.exists(file_path):
                 data = pd.read_csv(file_path)
@@ -196,6 +199,9 @@ def main():
                 with col1:
                     if st.button("Correct", key='correct_button', use_container_width=True):
                         st.session_state.correct_pressed = True
+
+    if 'correct_pressed' in st.session_state and st.session_state.correct_pressed:
+                        st.session_state.correct_pressed = True
                         st.session_state.correct_count += 1
                         st.session_state.correct_answers.append((question, answer))
                         if st.session_state.current_index == len(st.session_state.flashcards) - 1:
@@ -205,6 +211,9 @@ def main():
                             st.session_state.reveal = False
                 with col2:
                     if st.button("Incorrect", key='incorrect_button', use_container_width=True):
+                        st.session_state.incorrect_pressed = True
+
+    if 'incorrect_pressed' in st.session_state and st.session_state.incorrect_pressed:
                         st.session_state.incorrect_pressed = True
                         st.session_state.incorrect_count += 1
                         st.session_state.incorrect_answers.append((question, answer))
@@ -217,6 +226,9 @@ def main():
             else:
                 st.markdown("<div class='center-button'>", unsafe_allow_html=True)
                 if st.button("Reveal Answer", key='reveal_button', use_container_width=True):
+                    st.session_state.reveal = True
+
+    if 'reveal' in st.session_state and st.session_state.reveal:
                     st.session_state.reveal = True
                     st.session_state.reveal = True
                 st.markdown("</div>", unsafe_allow_html=True)
