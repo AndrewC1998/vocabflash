@@ -142,6 +142,15 @@ def main():
                 st.table(incorrect_df)
 
             if st.button("Restart Session", key='restart_summary'):
+                if st.button("Choose New Flashcards", key='choose_flashcards'):
+                    st.session_state.current_index = 0
+                    st.session_state.correct_count = 0
+                    st.session_state.incorrect_count = 0
+                    st.session_state.reveal = False
+                    st.session_state.session_ended = False
+                    st.session_state.correct_answers = []
+                    st.session_state.incorrect_answers = []
+                    st.session_state.flashcards = []
                 st.session_state.current_index = 0
                 st.session_state.correct_count = 0
                 st.session_state.incorrect_count = 0
@@ -193,6 +202,16 @@ def main():
             # Bottom Buttons for Restart and End Session
             st.markdown("<div class='bottom-buttons'>", unsafe_allow_html=True)
             col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Choose New Flashcards", key='choose_flashcards', help="Click to choose new flashcards", use_container_width=True):
+                    st.session_state.current_index = 0
+                    st.session_state.correct_count = 0
+                    st.session_state.incorrect_count = 0
+                    st.session_state.reveal = False
+                    st.session_state.session_ended = False
+                    st.session_state.correct_answers = []
+                    st.session_state.incorrect_answers = []
+                    st.session_state.flashcards = []
             with col1:
                 if st.button("Restart Session", key='restart_button', help="Click to restart the session", use_container_width=True):
                     st.session_state.current_index = 0
